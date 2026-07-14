@@ -7,7 +7,6 @@
 <style>
   :root {
     --navy: #1F2A44;
-    --navy-light: #2E3F63;
     --white: #FFFFFF;
     --grey-bg: #F5F6F8;
     --grey-border: #DDE1E9;
@@ -22,303 +21,69 @@
     --radius-sm: 8px;
     --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--grey-bg); color: var(--navy); min-height: 100vh; padding-bottom: 100px; }
 
-  body {
-    font-family: var(--font);
-    background: var(--grey-bg);
-    color: var(--navy);
-    min-height: 100vh;
-    padding-bottom: 40px;
-  }
+  .header { background: var(--navy); padding: 20px 20px 16px; position: sticky; top: 0; z-index: 10; }
+  .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .logo-mark { width: 36px; height: 36px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; color: var(--navy); flex-shrink: 0; }
+  .header h1 { color: white; font-size: 16px; font-weight: 700; line-height: 1.2; }
+  .header p { color: rgba(255,255,255,0.55); font-size: 12px; margin-top: 2px; }
+  .progress-bar { margin-top: 14px; height: 3px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: white; border-radius: 2px; transition: width 0.3s ease; width: 0%; }
 
-  /* Header */
-  .header {
-    background: var(--navy);
-    padding: 20px 20px 16px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  .header-top {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 4px;
-  }
-  .logo-mark {
-    width: 36px;
-    height: 36px;
-    background: white;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 900;
-    font-size: 18px;
-    color: var(--navy);
-    letter-spacing: -1px;
-    flex-shrink: 0;
-  }
-  .header h1 {
-    color: white;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.2;
-  }
-  .header p {
-    color: rgba(255,255,255,0.55);
-    font-size: 12px;
-    margin-top: 2px;
-  }
-
-  /* Progress bar */
-  .progress-bar {
-    margin-top: 14px;
-    height: 3px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    background: white;
-    border-radius: 2px;
-    transition: width 0.3s ease;
-    width: 0%;
-  }
-
-  /* Steps */
   .step { display: none; padding: 20px 16px 0; }
   .step.active { display: block; }
+  .step-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--grey-label); margin-bottom: 6px; }
+  .step-title { font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 20px; line-height: 1.2; }
 
-  /* Step label */
-  .step-label {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--grey-label);
-    margin-bottom: 6px;
-  }
-  .step-title {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--navy);
-    margin-bottom: 20px;
-    line-height: 1.2;
-  }
-
-  /* Cards de sélection */
-  .card-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .card-grid.single { grid-template-columns: 1fr; }
-
-  .sel-card {
-    background: white;
-    border: 2px solid var(--grey-border);
-    border-radius: var(--radius);
-    padding: 14px 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-align: center;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-  }
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .sel-card { background: white; border: 2px solid var(--grey-border); border-radius: var(--radius); padding: 14px 12px; cursor: pointer; transition: all 0.15s; text-align: center; -webkit-tap-highlight-color: transparent; user-select: none; }
   .sel-card .icon { font-size: 24px; margin-bottom: 6px; }
   .sel-card .label { font-size: 13px; font-weight: 600; color: var(--navy); line-height: 1.3; }
-  .sel-card .sublabel { font-size: 11px; color: var(--grey-label); margin-top: 2px; }
   .sel-card:active { transform: scale(0.97); }
-  .sel-card.selected {
-    border-color: var(--navy);
-    background: var(--navy);
-  }
+  .sel-card.selected { border-color: var(--navy); background: var(--navy); }
   .sel-card.selected .label { color: white; }
-  .sel-card.selected .sublabel { color: rgba(255,255,255,0.65); }
-  .sel-card.selected .icon { filter: brightness(10); }
 
-  /* Champs texte */
   .field { margin-bottom: 16px; }
-  .field label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--navy);
-    margin-bottom: 6px;
-  }
-  .field input, .field select, .field textarea {
-    width: 100%;
-    padding: 14px 14px;
-    border: 2px solid var(--grey-border);
-    border-radius: var(--radius-sm);
-    font-size: 16px; /* évite le zoom iOS */
-    font-family: var(--font);
-    color: var(--navy);
-    background: white;
-    appearance: none;
-    -webkit-appearance: none;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .field input:focus, .field select:focus, .field textarea:focus {
-    border-color: var(--navy);
-  }
+  .field label { display: block; font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+  .field input, .field select, .field textarea { width: 100%; padding: 14px; border: 2px solid var(--grey-border); border-radius: var(--radius-sm); font-size: 16px; font-family: var(--font); color: var(--navy); background: white; appearance: none; -webkit-appearance: none; outline: none; transition: border-color 0.15s; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--navy); }
   .field textarea { resize: none; min-height: 90px; line-height: 1.5; }
-  .field select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 14px center;
-    padding-right: 40px;
-  }
+  .field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; }
 
-  /* Badge statut */
-  .status-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    margin-left: 8px;
-  }
-  .badge-panne { background: var(--red-bg); color: var(--red); }
-  .badge-ok { background: var(--green-bg); color: var(--green); }
-  .badge-maint { background: var(--yellow-bg); color: var(--yellow); }
-
-  /* Boutons de navigation */
-  .nav {
-    display: flex;
-    gap: 10px;
-    margin-top: 24px;
-    padding: 0 16px;
-    position: sticky;
-    bottom: 0;
-    background: var(--grey-bg);
-    padding-top: 12px;
-    padding-bottom: 16px;
-  }
-  .btn {
-    flex: 1;
-    padding: 16px;
-    border-radius: var(--radius);
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    font-family: var(--font);
-    transition: all 0.15s;
-    -webkit-tap-highlight-color: transparent;
-  }
+  .nav { display: flex; gap: 10px; padding: 12px 16px 16px; position: fixed; bottom: 0; left: 0; right: 0; background: var(--grey-bg); border-top: 1px solid var(--grey-border); }
+  .btn { flex: 1; padding: 16px; border-radius: var(--radius); font-size: 15px; font-weight: 700; cursor: pointer; border: none; font-family: var(--font); transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
   .btn:active { transform: scale(0.97); }
   .btn-primary { background: var(--navy); color: white; }
-  .btn-primary:disabled { background: var(--grey-border); color: var(--grey-label); }
-  .btn-secondary {
-    background: white;
-    color: var(--navy);
-    border: 2px solid var(--grey-border);
-    flex: 0 0 auto;
-    width: 52px;
-    padding: 16px 0;
-    font-size: 20px;
-  }
+  .btn-secondary { background: white; color: var(--navy); border: 2px solid var(--grey-border); flex: 0 0 auto; width: 52px; padding: 16px 0; font-size: 20px; }
 
-  /* Récapitulatif */
-  .recap-card {
-    background: white;
-    border-radius: var(--radius);
-    overflow: hidden;
-    margin-bottom: 12px;
-  }
-  .recap-section-title {
-    background: var(--navy);
-    color: white;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 8px 16px;
-  }
-  .recap-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--grey-bg);
-    gap: 12px;
-  }
+  .recap-card { background: white; border-radius: var(--radius); overflow: hidden; margin-bottom: 12px; }
+  .recap-section-title { background: var(--navy); color: white; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 16px; }
+  .recap-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 16px; border-bottom: 1px solid var(--grey-bg); gap: 12px; }
   .recap-row:last-child { border-bottom: none; }
-  .recap-key {
-    font-size: 12px;
-    color: var(--grey-label);
-    font-weight: 500;
-    flex-shrink: 0;
-    width: 110px;
-  }
-  .recap-val {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--navy);
-    text-align: right;
-    flex: 1;
-  }
+  .recap-key { font-size: 12px; color: var(--grey-label); font-weight: 500; flex-shrink: 0; width: 110px; }
+  .recap-val { font-size: 13px; font-weight: 600; color: var(--navy); text-align: right; flex: 1; }
 
-  /* Bouton copier */
-  .btn-copy {
-    width: 100%;
-    padding: 16px;
-    background: var(--green);
-    color: white;
-    border: none;
-    border-radius: var(--radius);
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: var(--font);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 4px;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .btn-copy:active { transform: scale(0.98); }
-  .btn-copy.copied { background: #1a5c38; }
+  .btn-send { width: 100%; padding: 18px; background: var(--navy); color: white; border: none; border-radius: var(--radius); font-size: 16px; font-weight: 700; cursor: pointer; font-family: var(--font); display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 4px; -webkit-tap-highlight-color: transparent; }
+  .btn-send:active { transform: scale(0.98); }
+  .btn-send.sending { background: #4F6494; }
+  .btn-send.success { background: var(--green); }
+  .btn-send.error { background: var(--red); }
 
-  .btn-new {
-    width: 100%;
-    padding: 14px;
-    background: white;
-    color: var(--navy);
-    border: 2px solid var(--grey-border);
-    border-radius: var(--radius);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: var(--font);
-    margin-top: 10px;
-    -webkit-tap-highlight-color: transparent;
-  }
+  .btn-new { width: 100%; padding: 14px; background: white; color: var(--navy); border: 2px solid var(--grey-border); border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font); margin-top: 10px; -webkit-tap-highlight-color: transparent; }
 
-  /* Info box */
-  .info-box {
-    background: #EEF2FF;
-    border-left: 3px solid #4F46E5;
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
-    margin-bottom: 16px;
-    font-size: 13px;
-    color: #3730A3;
-    line-height: 1.5;
-  }
-
-  .hidden { display: none !important; }
+  .info-box { background: #EEF2FF; border-left: 3px solid #4F46E5; border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 16px; font-size: 13px; color: #3730A3; line-height: 1.5; }
+  .config-box { background: var(--yellow-bg); border-left: 3px solid #D97706; border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 16px; font-size: 13px; color: var(--yellow); line-height: 1.6; }
+  .config-box strong { display: block; margin-bottom: 4px; }
 </style>
 </head>
 <body>
+
+<!-- ⚠️ CONFIGURATION — remplace cette URL par l'URL de déploiement de ton Apps Script -->
+<script>
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJMF1Ng-zHVIasZmhA8LfKJ8vBgLrzJctHqqgAKjIBla42fMtGOtTyvJ9ilN5P74jlBg/exec";
+</script>
 
 <div class="header">
   <div class="header-top">
@@ -328,26 +93,21 @@
       <p id="step-counter">Étape 1 sur 4</p>
     </div>
   </div>
-  <div class="progress-bar">
-    <div class="progress-fill" id="progress"></div>
-  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
 </div>
 
-<!-- ÉTAPE 1 : Identification -->
+<!-- ÉTAPE 1 -->
 <div class="step active" id="step-1">
   <div class="step-label">Étape 1 / 4</div>
   <div class="step-title">Identification</div>
-
   <div class="field">
     <label>Technicien</label>
-    <input type="text" id="technicien" placeholder="Ton prénom et nom" autocomplete="name">
+    <input type="text" id="technicien" placeholder="Prénom et nom" autocomplete="name">
   </div>
-
   <div class="field">
     <label>Date d'intervention</label>
     <input type="date" id="date-intervention">
   </div>
-
   <div class="field">
     <label>ID Écran</label>
     <select id="ecran-select">
@@ -421,70 +181,36 @@
   </div>
 </div>
 
-<!-- ÉTAPE 2 : Nature de l'intervention -->
+<!-- ÉTAPE 2 -->
 <div class="step" id="step-2">
   <div class="step-label">Étape 2 / 4</div>
   <div class="step-title">Nature</div>
-
   <div class="step-label" style="margin-bottom:10px;">Type d'incident</div>
   <div class="card-grid">
-    <div class="sel-card" data-group="type" data-val="Panne écran">
-      <div class="icon">🖥️</div>
-      <div class="label">Panne écran</div>
-    </div>
-    <div class="sel-card" data-group="type" data-val="Problème affichage">
-      <div class="icon">🌫️</div>
-      <div class="label">Affichage</div>
-    </div>
-    <div class="sel-card" data-group="type" data-val="Problème son">
-      <div class="icon">🔇</div>
-      <div class="label">Son</div>
-    </div>
-    <div class="sel-card" data-group="type" data-val="Problème réseau">
-      <div class="icon">📡</div>
-      <div class="label">Réseau</div>
-    </div>
-    <div class="sel-card" data-group="type" data-val="Maintenance préventive">
-      <div class="icon">🔧</div>
-      <div class="label">Maintenance préventive</div>
-    </div>
-    <div class="sel-card" data-group="type" data-val="Autre">
-      <div class="icon">📋</div>
-      <div class="label">Autre</div>
-    </div>
+    <div class="sel-card" data-group="type" data-val="Panne écran"><div class="icon">🖥️</div><div class="label">Panne écran</div></div>
+    <div class="sel-card" data-group="type" data-val="Problème affichage"><div class="icon">🌫️</div><div class="label">Affichage</div></div>
+    <div class="sel-card" data-group="type" data-val="Problème son"><div class="icon">🔇</div><div class="label">Son</div></div>
+    <div class="sel-card" data-group="type" data-val="Problème réseau"><div class="icon">📡</div><div class="label">Réseau</div></div>
+    <div class="sel-card" data-group="type" data-val="Maintenance préventive"><div class="icon">🔧</div><div class="label">Maintenance préventive</div></div>
+    <div class="sel-card" data-group="type" data-val="Autre"><div class="icon">📋</div><div class="label">Autre</div></div>
   </div>
-
   <div class="step-label" style="margin-bottom:10px; margin-top:20px;">Statut écran après intervention</div>
   <div class="card-grid">
-    <div class="sel-card" data-group="statut" data-val="Fonctionnel">
-      <div class="icon">✅</div>
-      <div class="label">Fonctionnel</div>
-    </div>
-    <div class="sel-card" data-group="statut" data-val="En panne">
-      <div class="icon">❌</div>
-      <div class="label">En panne</div>
-    </div>
-    <div class="sel-card" data-group="statut" data-val="En maintenance">
-      <div class="icon">🔨</div>
-      <div class="label">En maintenance</div>
-    </div>
-    <div class="sel-card" data-group="statut" data-val="Hors service">
-      <div class="icon">⛔</div>
-      <div class="label">Hors service</div>
-    </div>
+    <div class="sel-card" data-group="statut" data-val="Fonctionnel"><div class="icon">✅</div><div class="label">Fonctionnel</div></div>
+    <div class="sel-card" data-group="statut" data-val="En panne"><div class="icon">❌</div><div class="label">En panne</div></div>
+    <div class="sel-card" data-group="statut" data-val="En maintenance"><div class="icon">🔨</div><div class="label">En maintenance</div></div>
+    <div class="sel-card" data-group="statut" data-val="Hors service"><div class="icon">⛔</div><div class="label">Hors service</div></div>
   </div>
 </div>
 
-<!-- ÉTAPE 3 : Description -->
+<!-- ÉTAPE 3 -->
 <div class="step" id="step-3">
   <div class="step-label">Étape 3 / 4</div>
   <div class="step-title">Description</div>
-
   <div class="field">
     <label>Que s'est-il passé ?</label>
-    <textarea id="description" placeholder="Décris brièvement le problème constaté et les actions effectuées…"></textarea>
+    <textarea id="description" placeholder="Décris brièvement le problème et les actions effectuées…"></textarea>
   </div>
-
   <div class="field">
     <label>Statut de l'incident</label>
     <select id="statut-incident">
@@ -494,72 +220,42 @@
       <option value="Résolu">Résolu — écran opérationnel</option>
     </select>
   </div>
-
   <div class="field">
     <label>Prochaine vérification <span style="font-weight:400;color:var(--grey-label)">(optionnel)</span></label>
     <input type="date" id="prochaine-verif">
   </div>
 </div>
 
-<!-- ÉTAPE 4 : Récapitulatif -->
+<!-- ÉTAPE 4 : Récapitulatif + envoi -->
 <div class="step" id="step-4">
   <div class="step-label">Étape 4 / 4</div>
   <div class="step-title">Récapitulatif</div>
 
-  <div class="info-box">
-    Vérifie les infos puis copie le rapport pour le transmettre ou le reporter dans Google Sheets.
-  </div>
-
   <div class="recap-card">
     <div class="recap-section-title">Identification</div>
-    <div class="recap-row">
-      <div class="recap-key">Technicien</div>
-      <div class="recap-val" id="r-technicien">—</div>
-    </div>
-    <div class="recap-row">
-      <div class="recap-key">Date</div>
-      <div class="recap-val" id="r-date">—</div>
-    </div>
-    <div class="recap-row">
-      <div class="recap-key">ID Écran</div>
-      <div class="recap-val" id="r-ecran">—</div>
-    </div>
+    <div class="recap-row"><div class="recap-key">Technicien</div><div class="recap-val" id="r-technicien">—</div></div>
+    <div class="recap-row"><div class="recap-key">Date</div><div class="recap-val" id="r-date">—</div></div>
+    <div class="recap-row"><div class="recap-key">ID Écran</div><div class="recap-val" id="r-ecran">—</div></div>
   </div>
-
   <div class="recap-card">
     <div class="recap-section-title">Incident</div>
-    <div class="recap-row">
-      <div class="recap-key">Type</div>
-      <div class="recap-val" id="r-type">—</div>
-    </div>
-    <div class="recap-row">
-      <div class="recap-key">Statut écran</div>
-      <div class="recap-val" id="r-statut-ecran">—</div>
-    </div>
-    <div class="recap-row">
-      <div class="recap-key">Statut incident</div>
-      <div class="recap-val" id="r-statut-incident">—</div>
-    </div>
+    <div class="recap-row"><div class="recap-key">Type</div><div class="recap-val" id="r-type">—</div></div>
+    <div class="recap-row"><div class="recap-key">Statut écran</div><div class="recap-val" id="r-statut-ecran">—</div></div>
+    <div class="recap-row"><div class="recap-key">Statut incident</div><div class="recap-val" id="r-statut-incident">—</div></div>
   </div>
-
   <div class="recap-card">
     <div class="recap-section-title">Description</div>
-    <div class="recap-row">
-      <div class="recap-val" id="r-description" style="text-align:left">—</div>
-    </div>
-    <div class="recap-row" id="r-verif-row">
-      <div class="recap-key">Prochaine vérif.</div>
-      <div class="recap-val" id="r-verif">—</div>
-    </div>
+    <div class="recap-row"><div class="recap-val" id="r-description" style="text-align:left">—</div></div>
+    <div class="recap-row" id="r-verif-row"><div class="recap-key">Prochaine vérif.</div><div class="recap-val" id="r-verif">—</div></div>
   </div>
 
-  <button class="btn-copy" id="btn-copy" onclick="copierRapport()">
-    <span>📋</span> Copier le rapport
+  <button class="btn-send" id="btn-send" onclick="envoyerVersSheets()">
+    <span>🚀</span> <span id="btn-send-label">Envoyer vers Google Sheets</span>
   </button>
   <button class="btn-new" onclick="nouvelleIntervention()">+ Nouvelle intervention</button>
 </div>
 
-<!-- Navigation -->
+<!-- Navigation fixe -->
 <div class="nav" id="nav-bar">
   <button class="btn btn-secondary" id="btn-back" onclick="goBack()">←</button>
   <button class="btn btn-primary" id="btn-next" onclick="goNext()">Suivant</button>
@@ -568,53 +264,35 @@
 <script>
   let currentStep = 1;
   const totalSteps = 4;
-  const selections = { type: '', statut: '' };
+  const sel = { type: '', statut: '' };
 
-  // Date par défaut = aujourd'hui
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('date-intervention').value = today;
+  document.getElementById('date-intervention').value = new Date().toISOString().split('T')[0];
 
   function updateUI() {
     document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
     document.getElementById(`step-${currentStep}`).classList.add('active');
     document.getElementById('step-counter').textContent = `Étape ${currentStep} sur ${totalSteps}`;
     document.getElementById('progress').style.width = `${(currentStep / totalSteps) * 100}%`;
-
-    const backBtn = document.getElementById('btn-back');
-    const nextBtn = document.getElementById('btn-next');
-    const navBar  = document.getElementById('nav-bar');
-
-    backBtn.style.display = currentStep === 1 ? 'none' : 'block';
-
+    document.getElementById('btn-back').style.display = currentStep === 1 ? 'none' : 'block';
+    const navBar = document.getElementById('nav-bar');
     if (currentStep === totalSteps) {
       navBar.style.display = 'none';
     } else {
       navBar.style.display = 'flex';
-      nextBtn.textContent = currentStep === totalSteps - 1 ? 'Valider' : 'Suivant';
+      document.getElementById('btn-next').textContent = currentStep === totalSteps - 1 ? 'Valider' : 'Suivant';
     }
-
     window.scrollTo(0, 0);
   }
 
   function validateStep() {
-    if (currentStep === 1) {
-      return document.getElementById('technicien').value.trim() !== ''
-          && document.getElementById('ecran-select').value !== '';
-    }
-    if (currentStep === 2) {
-      return selections.type !== '' && selections.statut !== '';
-    }
-    if (currentStep === 3) {
-      return document.getElementById('statut-incident').value !== '';
-    }
+    if (currentStep === 1) return document.getElementById('technicien').value.trim() !== '' && document.getElementById('ecran-select').value !== '';
+    if (currentStep === 2) return sel.type !== '' && sel.statut !== '';
+    if (currentStep === 3) return document.getElementById('statut-incident').value !== '';
     return true;
   }
 
   function goNext() {
-    if (!validateStep()) {
-      shakeBtn();
-      return;
-    }
+    if (!validateStep()) { shakeBtn(); return; }
     if (currentStep < totalSteps) {
       if (currentStep === totalSteps - 1) buildRecap();
       currentStep++;
@@ -622,27 +300,21 @@
     }
   }
 
-  function goBack() {
-    if (currentStep > 1) { currentStep--; updateUI(); }
-  }
+  function goBack() { if (currentStep > 1) { currentStep--; updateUI(); } }
 
   function shakeBtn() {
     const btn = document.getElementById('btn-next');
     btn.style.background = '#B91C1C';
     btn.textContent = 'Champs manquants';
-    setTimeout(() => {
-      btn.style.background = '';
-      btn.textContent = currentStep === totalSteps - 1 ? 'Valider' : 'Suivant';
-    }, 1200);
+    setTimeout(() => { btn.style.background = ''; btn.textContent = currentStep === totalSteps - 1 ? 'Valider' : 'Suivant'; }, 1400);
   }
 
-  // Cards de sélection
   document.querySelectorAll('.sel-card').forEach(card => {
     card.addEventListener('click', () => {
-      const group = card.dataset.group;
-      document.querySelectorAll(`.sel-card[data-group="${group}"]`).forEach(c => c.classList.remove('selected'));
+      const g = card.dataset.group;
+      document.querySelectorAll(`.sel-card[data-group="${g}"]`).forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
-      selections[group] = card.dataset.val;
+      sel[g] = card.dataset.val;
     });
   });
 
@@ -653,70 +325,77 @@
   }
 
   function buildRecap() {
-    const ecranSelect = document.getElementById('ecran-select');
-    const ecranText   = ecranSelect.options[ecranSelect.selectedIndex]?.text || '—';
-    const verif       = document.getElementById('prochaine-verif').value;
-
-    document.getElementById('r-technicien').textContent     = document.getElementById('technicien').value || '—';
-    document.getElementById('r-date').textContent           = formatDate(document.getElementById('date-intervention').value);
-    document.getElementById('r-ecran').textContent          = ecranText;
-    document.getElementById('r-type').textContent           = selections.type || '—';
-    document.getElementById('r-statut-ecran').textContent   = selections.statut || '—';
+    const ecranOpt = document.getElementById('ecran-select');
+    const verif    = document.getElementById('prochaine-verif').value;
+    document.getElementById('r-technicien').textContent      = document.getElementById('technicien').value || '—';
+    document.getElementById('r-date').textContent            = formatDate(document.getElementById('date-intervention').value);
+    document.getElementById('r-ecran').textContent           = ecranOpt.options[ecranOpt.selectedIndex]?.text || '—';
+    document.getElementById('r-type').textContent            = sel.type || '—';
+    document.getElementById('r-statut-ecran').textContent    = sel.statut || '—';
     document.getElementById('r-statut-incident').textContent = document.getElementById('statut-incident').value || '—';
-    document.getElementById('r-description').textContent    = document.getElementById('description').value || '(aucune description)';
-
-    if (verif) {
-      document.getElementById('r-verif').textContent = formatDate(verif);
-      document.getElementById('r-verif-row').style.display = 'flex';
-    } else {
-      document.getElementById('r-verif-row').style.display = 'none';
-    }
+    document.getElementById('r-description').textContent     = document.getElementById('description').value || '(aucune description)';
+    if (verif) { document.getElementById('r-verif').textContent = formatDate(verif); document.getElementById('r-verif-row').style.display = 'flex'; }
+    else { document.getElementById('r-verif-row').style.display = 'none'; }
   }
 
-  function copierRapport() {
-    const ecranSelect = document.getElementById('ecran-select');
-    const ecranText   = ecranSelect.options[ecranSelect.selectedIndex]?.text || '—';
-    const verif       = document.getElementById('prochaine-verif').value;
+  async function envoyerVersSheets() {
+    const btn   = document.getElementById('btn-send');
+    const label = document.getElementById('btn-send-label');
 
-    const texte = [
-      `📋 RAPPORT D'INTERVENTION — RÉGIE AFRICA`,
-      `─────────────────────────────`,
-      `👤 Technicien : ${document.getElementById('technicien').value}`,
-      `📅 Date : ${formatDate(document.getElementById('date-intervention').value)}`,
-      `🖥️  Écran : ${ecranText}`,
-      `─────────────────────────────`,
-      `🔧 Type : ${selections.type}`,
-      `📊 Statut écran : ${selections.statut}`,
-      `🚦 Statut incident : ${document.getElementById('statut-incident').value}`,
-      `─────────────────────────────`,
-      `📝 Description :`,
-      document.getElementById('description').value || '(aucune description)',
-      verif ? `\n📆 Prochaine vérif. : ${formatDate(verif)}` : '',
-    ].filter(Boolean).join('\n');
+    btn.classList.add('sending');
+    btn.disabled = true;
+    label.textContent = 'Envoi en cours…';
 
-    navigator.clipboard.writeText(texte).then(() => {
-      const btn = document.getElementById('btn-copy');
-      btn.classList.add('copied');
-      btn.innerHTML = '<span>✅</span> Copié !';
+    const payload = {
+      technicien:        document.getElementById('technicien').value,
+      dateIntervention:  document.getElementById('date-intervention').value,
+      ecranId:           document.getElementById('ecran-select').value,
+      typeIncident:      sel.type,
+      statutEcran:       sel.statut,
+      statutIncident:    document.getElementById('statut-incident').value,
+      description:       document.getElementById('description').value,
+      prochaineVerif:    document.getElementById('prochaine-verif').value,
+    };
+
+    try {
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (data.status === 'ok') {
+        btn.classList.remove('sending');
+        btn.classList.add('success');
+        label.textContent = '✅ Envoyé — ' + data.id;
+      } else {
+        throw new Error(data.message || 'Erreur inconnue');
+      }
+    } catch (err) {
+      btn.classList.remove('sending');
+      btn.classList.add('error');
+      label.textContent = '❌ Échec — vérifie la connexion';
       setTimeout(() => {
-        btn.classList.remove('copied');
-        btn.innerHTML = '<span>📋</span> Copier le rapport';
-      }, 2000);
-    }).catch(() => {
-      alert('Copie manuelle :\n\n' + texte);
-    });
+        btn.classList.remove('error');
+        btn.disabled = false;
+        label.textContent = 'Réessayer';
+      }, 3000);
+    }
   }
 
   function nouvelleIntervention() {
     document.getElementById('technicien').value = '';
-    document.getElementById('date-intervention').value = today;
+    document.getElementById('date-intervention').value = new Date().toISOString().split('T')[0];
     document.getElementById('ecran-select').value = '';
     document.getElementById('description').value = '';
     document.getElementById('statut-incident').value = '';
     document.getElementById('prochaine-verif').value = '';
-    selections.type = '';
-    selections.statut = '';
+    sel.type = ''; sel.statut = '';
     document.querySelectorAll('.sel-card').forEach(c => c.classList.remove('selected'));
+    const btn = document.getElementById('btn-send');
+    btn.classList.remove('success', 'error', 'sending');
+    btn.disabled = false;
+    document.getElementById('btn-send-label').textContent = 'Envoyer vers Google Sheets';
     currentStep = 1;
     document.getElementById('nav-bar').style.display = 'flex';
     updateUI();
