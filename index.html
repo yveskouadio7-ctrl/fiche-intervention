@@ -82,7 +82,7 @@
 
 <!-- ⚠️ CONFIGURATION — remplace cette URL par l'URL de déploiement de ton Apps Script -->
 <script>
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzfblUv32K07mAKlQ8BJXAOYD2XaAlPmPa-s1CLm9sw7kPGPplgvUFE5Cage9KFT4OXYA/exec";
+  const SHEETDB_URL = "https://sheetdb.io/api/v1/prdnxn3vu9uyh";
 </script>
 
 <div class="header">
@@ -346,39 +346,36 @@
     btn.disabled = true;
     label.textContent = 'Envoi en cours…';
 
+    const ecranSelect = document.getElementById('ecran-select');
+    const ecranText   = ecranSelect.options[ecranSelect.selectedIndex]?.text || '';
+
+    // SheetDB attend un objet { data: { colonne: valeur } }
+    // Les colonnes correspondent aux en-têtes de l'onglet Journal Incidents
     const payload = {
-      technicien:        document.getElementById('technicien').value,
-      dateIntervention:  document.getElementById('date-intervention').value,
-      ecranId:           document.getElementById('ecran-select').value,
-      typeIncident:      sel.type,
-      statutEcran:       sel.statut,
-      statutIncident:    document.getElementById('statut-incident').value,
-      description:       document.getElementById('description').value,
-      prochaineVerif:    document.getElementById('prochaine-verif').value,
+      data: {
+        "ID Écran":          document.getElementById('ecran-select').value,
+        "Type incident":     sel.type,
+        "Date signalement":  document.getElementById('date-intervention').value,
+        "Date intervention": document.getElementById('date-intervention').value,
+        "Description":       document.getElementById('description').value,
+        "Statut incident":   document.getElementById('statut-incident').value,
+      }
     };
 
     try {
-      // Envoi via URL avec paramètres GET pour contourner le CORS
-      const params = new URLSearchParams(payload);
-      const url = APPS_SCRIPT_URL + '?' + params.toString();
-
-      const img = new Image();
-      img.src = url;
-
-      // Envoi également en POST via no-cors comme backup
-      fetch(APPS_SCRIPT_URL, {
+      const res = await fetch(SHEETDB_URL, {
         method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
-      setTimeout(() => {
+      if (res.ok) {
         btn.classList.remove('sending');
         btn.classList.add('success');
         label.textContent = '✅ Envoyé';
-      }, 1500);
-
+      } else {
+        throw new Error('Erreur ' + res.status);
+      }
     } catch (err) {
       btn.classList.remove('sending');
       btn.classList.add('error');
