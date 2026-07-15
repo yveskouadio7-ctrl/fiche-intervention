@@ -82,7 +82,7 @@
 
 <!-- ⚠️ CONFIGURATION — remplace cette URL par l'URL de déploiement de ton Apps Script -->
 <script>
-  const SHEETDB_URL = "https://sheetdb.io/api/v1/prdnxn3vu9uyh/sheets/Journal%20Incidents";
+  const SHEETDB_URL = "https://sheetdb.io/api/v1/prdnxn3vu9uyh?sheet=Journal%20Incidents";
 </script>
 
 <div class="header">
@@ -365,7 +365,10 @@
     try {
       const res = await fetch(SHEETDB_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
         body: JSON.stringify(payload),
       });
 
