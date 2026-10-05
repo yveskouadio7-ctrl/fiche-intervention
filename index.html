@@ -316,6 +316,10 @@
       document.querySelectorAll(`.sel-card[data-group="${g}"]`).forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
       sel[g] = card.dataset.val;
+      // Si RAS sélectionné : statut écran = Fonctionnel, statut incident = RAS
+      if (sel.type === 'RAS') {
+        sel.statut = 'Fonctionnel';
+      }
     });
   });
 
@@ -351,7 +355,7 @@
       ecranId:           document.getElementById('ecran-select').value,
       typeIncident:      sel.type,
       statutEcran:       sel.statut,
-      statutIncident:    document.getElementById('statut-incident').value,
+      statutIncident:    sel.type === 'RAS' ? 'RAS' : document.getElementById('statut-incident').value,
       dateIntervention:  document.getElementById('date-intervention').value,
       description:       document.getElementById('description').value,
       prochaineVerif:    document.getElementById('prochaine-verif').value,
