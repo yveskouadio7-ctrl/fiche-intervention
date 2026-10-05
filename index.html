@@ -362,11 +362,19 @@
     };
 
     try {
-      await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
+      // Envoi via GET pour contourner le CORS (Apps Script accepte les deux)
+      const params = new URLSearchParams({
+        ecranId:           payload.ecranId,
+        typeIncident:      payload.typeIncident,
+        statutEcran:       payload.statutEcran,
+        statutIncident:    payload.statutIncident,
+        dateIntervention:  payload.dateIntervention,
+        description:       payload.description,
+        prochaineVerif:    payload.prochaineVerif || '',
+      });
+      const res = await fetch(APPS_SCRIPT_URL + '?' + params.toString(), {
+        method: 'GET',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(payload),
       });
       btn.classList.remove('sending');
       btn.classList.add('success');
