@@ -82,7 +82,7 @@
 
 <!-- ⚠️ CONFIGURATION — remplace cette URL par l'URL de déploiement de ton Apps Script -->
 <script>
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzfblUv32K07mAKlQ8BJXAOYD2XaAlPmPa-s1CLm9sw7kPGPplgvUFE5Cage9KFT4OXYA/exec";
+  const SHEETDB_URL = "https://sheetdb.io/api/v1/prdnxn3vu9uyh?sheet=Journal%20Incidents";
 </script>
 
 <div class="header">
@@ -362,23 +362,30 @@
     };
 
     try {
-      // Envoi via GET pour contourner le CORS (Apps Script accepte les deux)
-      const params = new URLSearchParams({
-        ecranId:           payload.ecranId,
-        typeIncident:      payload.typeIncident,
-        statutEcran:       payload.statutEcran,
-        statutIncident:    payload.statutIncident,
-        dateIntervention:  payload.dateIntervention,
-        description:       payload.description,
-        prochaineVerif:    payload.prochaineVerif || '',
+      const res = await fetch(SHEETDB_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          data: {
+            "ID Écran":          payload.ecranId,
+            "Type incident":     payload.typeIncident,
+            "Date signalement":  payload.dateIntervention,
+            "Date intervention": payload.dateIntervention,
+            "Description":       payload.description,
+            "Statut incident":   payload.statutIncident,
+          }
+        }),
       });
-      const res = await fetch(APPS_SCRIPT_URL + '?' + params.toString(), {
-        method: 'GET',
-        mode: 'no-cors',
-      });
-      btn.classList.remove('sending');
-      btn.classList.add('success');
-      label.textContent = '✅ Envoyé';
+      if (res.ok) {
+        btn.classList.remove('sending');
+        btn.classList.add('success');
+        label.textContent = '✅ Envoyé';
+      } else {
+        throw new Error('Erreur ' + res.status);
+      }
     } catch (err) {
       btn.classList.remove('sending');
       btn.classList.add('error');
