@@ -287,7 +287,7 @@
 
   function validateStep() {
     if (currentStep === 1) return document.getElementById('technicien').value.trim() !== '' && document.getElementById('ecran-select').value !== '';
-    if (currentStep === 2) return sel.type !== '' && sel.statut !== '';
+    if (currentStep === 2) return sel.type !== '' && (sel.statut !== '' || sel.type === 'RAS');
     if (currentStep === 3) return document.getElementById('statut-incident').value !== '';
     return true;
   }
@@ -347,39 +347,26 @@
     btn.disabled = true;
     label.textContent = 'Envoi en cours…';
 
-    const ecranSelect = document.getElementById('ecran-select');
-    const ecranText   = ecranSelect.options[ecranSelect.selectedIndex]?.text || '';
-
-    // SheetDB attend un objet { data: { colonne: valeur } }
-    // Les colonnes correspondent aux en-têtes de l'onglet Journal Incidents
     const payload = {
-      data: {
-        "ID Écran":          document.getElementById('ecran-select').value,
-        "Type incident":     sel.type,
-        "Date signalement":  document.getElementById('date-intervention').value,
-        "Date intervention": document.getElementById('date-intervention').value,
-        "Description":       document.getElementById('description').value,
-        "Statut incident":   document.getElementById('statut-incident').value,
-      }
+      ecranId:           document.getElementById('ecran-select').value,
+      typeIncident:      sel.type,
+      statutEcran:       sel.statut,
+      statutIncident:    document.getElementById('statut-incident').value,
+      dateIntervention:  document.getElementById('date-intervention').value,
+      description:       document.getElementById('description').value,
+      prochaineVerif:    document.getElementById('prochaine-verif').value,
     };
 
     try {
-      const res = await fetch(SHEETDB_URL, {
+      await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify(payload),
       });
-
-      if (res.ok) {
-        btn.classList.remove('sending');
-        btn.classList.add('success');
-        label.textContent = '✅ Envoyé';
-      } else {
-        throw new Error('Erreur ' + res.status);
-      }
+      btn.classList.remove('sending');
+      btn.classList.add('success');
+      label.textContent = '✅ Envoyé';
     } catch (err) {
       btn.classList.remove('sending');
       btn.classList.add('error');
